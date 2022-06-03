@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package src;
 
 import java.io.File;
@@ -21,26 +17,24 @@ import java.util.StringTokenizer;
 import org.jfree.ui.RefineryUtilities;
 import src.QAP.Cromosoma;
 
-/**
- *
- * @author Usuario
- */
+
 public class QAP {
 
-    int tam = 0;//tamaño del problema
+    int tam = 0;//Problem's size
     double[][] flujo;
     double[][] distancia;
-    public int Ev = 0;//veces que se llama a la funcion coste
+    public int Ev = 0;//Number of times the cost function is called
 
     public ArrayList<double[]> seguimiento = new ArrayList<double[]>();
 
     /**
      * @param args the command line arguments
      */
-    public QAP() {//ESTO VALE SOLO PARA INSTANCIAR LA TABLA
+    public QAP() {
     }
 
     ;
+    //This method is used to read the QAP databases on the .dat files
     public QAP(String nombre) {
         File fichero = new File(nombre);
         String texto = new String("");
@@ -52,8 +46,8 @@ public class QAP {
 
             // Leemos linea a linea el fichero
             while (s.hasNextLine()) {
-                String linea = s.nextLine(); 	// Guardamos la linea en un String
-                texto = texto + linea;      // Imprimimos la linea
+                String linea = s.nextLine(); 	
+                texto = texto + linea;      
             }
 
             StringTokenizer parser = new StringTokenizer(texto);
@@ -133,8 +127,12 @@ public class QAP {
     }
 
     public double coste(int[] sol) {
-        //sol [0 1 2] al lugar 0 se le asigna la unidad 0 etc
+        //A solution for this problem is expressed as an array (sol) such as [0 1 2] meaning that the unit "0" is asigned to the place "0", unit "1"
+        //to place "1", and so on
 
+
+
+        
         double coste = 0;
 
         for (int i = 0; i < tam; i++) {
@@ -148,7 +146,7 @@ public class QAP {
     }
 
     public double coste(int[] sol, int i, int j, double coste_previo) {
-        //sol [0 1 2] al lugar 0 se le asigna la unidad 0 etc
+        //This method returns the cost of swaping the positions i j in a solution (previous_cost - current_cost)
 
         double coste = 0;
 
@@ -166,7 +164,7 @@ public class QAP {
     }
 
     public int[] Dos_opt(int[] sol, int i, int j) {
-        // cambia la posicion i por la posicion j
+        // this is just a swap
         int[] sol_aux = sol.clone();
 
         int aux = sol_aux[i];
@@ -175,7 +173,7 @@ public class QAP {
 
         return sol_aux;
     }
-
+//POR AQUI
     public int[] BusquedaGreedy() {
         int[] sol_final = new int[tam];
         int tam_sol = 0;
