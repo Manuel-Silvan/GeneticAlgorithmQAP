@@ -173,12 +173,17 @@ public class QAP {
 
         return sol_aux;
     }
-//POR AQUI
+    
+    /**
+     * It takes the best location and the best unit and assigns them to each other
+     * 
+     * @return The method returns an array of integers that represents the solution found by a greedy algorithm.
+     */
     public int[] BusquedaGreedy() {
         int[] sol_final = new int[tam];
         int tam_sol = 0;
 
-        //generacion de candidatos
+        
         List<Integer> lugares_candidatos = new ArrayList<Integer>();
         List<Integer> unidades_candidatos = new ArrayList<Integer>();
         for (int i = 0; i < tam; i++) {
@@ -186,9 +191,7 @@ public class QAP {
             unidades_candidatos.add(i + 1);
         }
         while (tam_sol < tam) {
-            //funcion de seleccion
-
-            //mejor lugar
+            
             double menor_dist = 0;
             int pos_mejor_lugar = -1;
             int mejor_lugar;
@@ -238,6 +241,14 @@ public class QAP {
 
     }
 
+    /**
+     * It generates a random solution and then checks if it's better than the previous one. If it is,
+     * it replaces the previous solution with the new one
+     * 
+     * @param n number of iterations
+     * @param seed the seed for the random number generator
+     * @return The best solution found randomly.
+     */
     public int[] BusquedaAleatoria(int n, int seed) {
         Random r = new Random(seed);
         int posicion;
@@ -264,6 +275,13 @@ public class QAP {
         return sol_final;
     }
 
+    /**
+     * It generates a random solution, then it tries to improve it by swapping two positions in the
+     * solution with the operator 2-opt. If the new solution is better, it becomes the new solution. If not, it tries again
+     * 
+     * @param seed the seed for the random number generator
+     * @return The best solution found.
+     */
     public int[] BusquedaLocalMejor(int seed) {
         //Genera solucion
         int[] solucion = BusquedaAleatoria(1, seed);
@@ -301,6 +319,14 @@ public class QAP {
 
     }
 
+    /**
+     * It generates a random solution, then it tries to improve it by swapping two positions in the
+     * solution with the operator 2-opt. The new solution is the best one of all the possible solutions produced on the solution with the operator 2-opt. If not, it tries again
+     * 
+     * @param seed the seed for the random number generator
+     * @param inicio the initial solution
+     * @return The best solution found.
+     */
     public int[] BusquedaLocalMejor(int seed, int[] inicio) {
         //Genera solucion
         Random r = new Random(seed);
@@ -340,6 +366,13 @@ public class QAP {
 
     }
 
+    /**
+     * It takes an array and its size as parameters and returns a string representation of the array
+     * 
+     * @param s the array
+     * @param tam the size of the array
+     * @return The array is being returned as a string.
+     */
     public static String atexto(int[] s, int tam) {
         String a = new String("[");
         for (int i = 0; i < tam; i++) {
@@ -349,6 +382,17 @@ public class QAP {
         return a;
     }
 
+    /**
+     * (Operator needed in the Genetic algorithms)
+     * It takes a solution, a size of the sublist, and a random number generator. It then generates two
+     * random indices, that indicates the beginnings of each sublist, then it shuffles the two sublist, separates them and finally put each element of the sublist in their place
+     *  in the solution
+     * 
+     * @param sol the solution
+     * @param s size of the sublist
+     * @param r Random object
+     * @return The method returns a new solution.
+     */
     int[] sublista(int[] sol, int s, Random r) {
         int[] solucion = sol.clone();
 
@@ -394,11 +438,15 @@ public class QAP {
         int[] sol;
         double coste;
 
+        // Creating a new chromosome with the given solution and calculating its cost.
         public Cromosoma(int[] sol) {
             this.sol = sol.clone();
             coste = coste(sol);
         }
 
+        /**
+         * This function calculates the cost of the solution 
+         */
         public void recalcular() {
             coste = coste(sol);
         }
@@ -419,6 +467,13 @@ public class QAP {
             return s;
         }
 
+        /**
+         * The Hamming distance between two strings of equal length is the number of positions at which
+         * the corresponding symbols are different
+         * 
+         * @param a is the chromosome that we want to compare with the current chromosome
+         * @return The distance between two chromosomes.
+         */
         public int distancia_hamming(Cromosoma a) {
             int h = 0;
             for (int i = 0; i < tam; i++) {
@@ -429,13 +484,21 @@ public class QAP {
             return h;
         }
 
-        public Cromosoma cruceOX_disruptivo(Cromosoma a, Cromosoma b, Random r) {//DEBERIAS SER ESTATICO
+        /**
+         * It takes two chromosomes, a and b, and returns a new chromosome that is a combination of the
+         * two thorugh a disruptive OX crossover
+         * 
+         * @param a the first parent
+         * @param b the second parent
+         * @param r Random object
+         * @return the child.
+         */
+        public Cromosoma cruceOX_disruptivo(Cromosoma a, Cromosoma b, Random r) {//Maybe it should be static
             // sublista de a 
             // eliminamos los elementos de la sublista de b (copia)
             // rellenamos los elementos sin marcar con lo que queda en b
 
-            //System.out.println("PADRE "+QAP.atexto(a.sol, tam));
-            //System.out.println("MADRE "+QAP.atexto(b.sol, tam));
+            
             int n = tam / 4;
 
             Cromosoma a_copia = a.clone();
@@ -470,18 +533,26 @@ public class QAP {
             }
 
             a_copia.recalcular();
-            //System.out.println("HIJO "+QAP.atexto(a_copia.sol, tam));
+            
             return a_copia.clone();
 
         }
 
+        /**
+         * It takes two chromosomes, a and b, and returns a new chromosome that is a combination of the
+         * two thorugh a smooth OX crossover (it tries to maintain as much as the parents structure as possible)
+         * 
+         * @param a parent 1
+         * @param b parent 2
+         * @param r Random object
+         * @return A child.
+         */
         public Cromosoma cruceOX_suavizado(Cromosoma a, Cromosoma b, Random r) {//DEBERIAS SER ESTATICO
             // sublista de a 
             // eliminamos los elementos de la sublista de b (copia)
             // rellenamos los elementos sin marcar con lo que queda en b
 
-            //System.out.println("PADRE "+QAP.atexto(a.sol, tam));
-            //System.out.println("MADRE "+QAP.atexto(b.sol, tam));
+            
             int n = tam / 4;
 
             Cromosoma a_copia = a.clone();
@@ -538,11 +609,11 @@ public class QAP {
             }
 
             a_copia.recalcular();
-            //System.out.println("HIJO "+QAP.atexto(a_copia.sol, tam));
+            
             return a_copia.clone();
 
         }
-
+        //POR AQUI VAMOS            
         public Cromosoma cruceHUX(Cromosoma a, Cromosoma b, Random r) {
 
             double probr = 0.1;
