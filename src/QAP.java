@@ -613,7 +613,15 @@ public class QAP {
             return a_copia.clone();
 
         }
-        //POR AQUI VAMOS            
+               
+        /**
+         * It takes two chromosomes, a and b, and returns a new chromosome that is a combination of the
+         * two thorugh a HUX Crossover (adapted to the QAP restrictions)
+         * @param a parent 1
+         * @param b parent 2
+         * @param r Random object
+         * @return A new Cromosoma object (a child).
+         */
         public Cromosoma cruceHUX(Cromosoma a, Cromosoma b, Random r) {
 
             double probr = 0.1;
@@ -621,8 +629,7 @@ public class QAP {
             List<Integer> saco_auxiliar2 = new ArrayList<Integer>();
             int[] hux = new int[tam];
             int[] hijo = new int[tam];
-            //System.out.println("PADRE "+atexto(a.sol, tam));
-            //System.out.println("MADRE "+atexto(b.sol, tam));
+            
 
             for (int j = 0; j < tam; j++) {
                 if (a.sol[j] != b.sol[j]) {
@@ -635,7 +642,7 @@ public class QAP {
 
                 hijo[j] = -1;
             }
-            //System.out.println("HUX "+atexto(hux, tam));
+            
 
             for (int j = 0; j < tam; j++) {
 
@@ -683,106 +690,42 @@ public class QAP {
                 }
             }
 
-            //System.out.println("HIJO  "+atexto(hijo, tam));
+            
             return new Cromosoma(hijo);
 
-            /*
-            Cromosoma h1 = a.clone();
-            Cromosoma h2 = a.clone();
-            int swaps = 0;
-            while(swaps < hamming/2){
-                for (int i = 0; i < tam; i++) {
-                    if(h1.sol[i]!=h2.sol[i] && h1.sol[i]!=b.sol[i]){
-                        if(r.nextBoolean()){
-                            
-                            int i1=0;
-                            int i2=0;
-                            for (int j = 0; j < tam; j++) {
-                                if(h1.sol[j]==b.sol[i]){
-                                    i1=j;
-                                }
-                                if(h2.sol[j]==a.sol[i]){
-                                    i2=j;
-                                }
-                            }
-                            int [] sol1 = Dos_opt(h1.sol, i1, i);
-                            h1.sol=sol1;
-                            int [] sol2 = Dos_opt(h2.sol, i2, i);
-                            h2.sol=sol2;
-                           
-                            swaps++;
-                        }
-                    }
-                }
-            }
-            h1.recalcular();
-            h2.recalcular();
-            ArrayList<Cromosoma> h = new ArrayList<Cromosoma>();
-            h.add(h1);
-            h.add(h2);
-            return h;*/
+            
         }
 
+        
+        /**
+         * Mutation operator.
+         * The probability of a mutation is determined by some parameters that depends on the stage of the number of generations
+         * , and if that number is less than the probability of mutation, it
+         * performs a 2-opt mutation on the solution
+         * 
+         * @param r Random object
+         * @param t current generation
+         * @param stall number of iterations without improvement
+         * @param pmax maximum mutation probability
+         * @param pmin minimum mutation probability
+         */
         public void mutacion(Random r, int t, int stall, double pmax, double pmin) {
 
-            /*if(r.nextDouble()< prob){
-                int corte = r.nextInt(tam);
-            Queue<Integer> parte1 = new LinkedList<Integer>();
-            Queue<Integer> parte2 = new LinkedList<Integer>();
-            for (int i = 0; i < tam; i++) {
-                if(i<corte){
-                    parte1.add(sol[i]);
-                }else{
-                    parte2.add(sol[i]);
-                }
-            }
             
-            
-            
-            for (int i = 0; i < tam; i++) {
-                if(parte2.size()!=0){
-                    sol[i]= parte2.poll();
-                }else{
-                    sol[i]= parte1.poll();
-                }
-            }
-            
-            
-
-            
-            }*/
             double prob = t * ((pmin - pmax) / (stall - 1)) + pmax;
-            ;
+            
             if (r.nextDouble() < prob) {
-                /*int n;
                 
-                if(t< stall/4){
-                     n = 3;
-                }else if(t< stall/2){
-                     n = 1;
-                }else if(t< 3*stall/4){
-                     n = 1;
-                }else {
-                     n = 1;
-                }*/
 
-                //for (int i = 0; i < n; i++) {
+                
                 sol = Dos_opt(sol, r.nextInt(tam), r.nextInt(tam));
-                //}
-                /*    
-                List<Integer> list = new LinkedList<Integer>();
-                for (int i = 0; i < tam; i++) {
-                    list.add(sol[i]);
-                }
-                Collections.reverse(list);
-                for (int i = 0; i < tam; i++) {
-                    sol[i]=list.get(i);
-                }*/
+                
+                
                 this.recalcular();
             }
 
         }
-
+        //POR AQUI
         public void mutacionGEN(Random r, int t, int stall, double pmax, double pmin) {
 
             double prob = t * ((pmin - pmax) / (stall - 1)) + pmax;
