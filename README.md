@@ -1,6 +1,6 @@
 # GeneticAlgorithmQAP
 
-This little project testes three popular genetic algorithms on a famous optimization problem called "Quadratic assignation problem" (QAP). 
+This little project testes three popular genetic algorithms on a famous optimization problem called "Quadratic assignment problem" (QAP). 
 The topics we will cover in this file are:
 1. QAP and Greddy solution.
 2. Simple Genetic Algorithm.
