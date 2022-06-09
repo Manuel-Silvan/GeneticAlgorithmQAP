@@ -725,7 +725,19 @@ public class QAP {
             }
 
         }
-        //POR AQUI
+        
+        /**
+         * Mutation operator.
+         * The probability of a mutation is determined by some parameters that depends on the stage of the number of generations
+         * , for each piece of the solution we apply the 2-opt operator with another random piece of the solution according to the 
+         * mutation probability.
+         * 
+         * @param r Random object
+         * @param t current generation
+         * @param stall number of iterations without improvement
+         * @param pmax maximum mutation probability
+         * @param pmin minimum mutation probability
+         */
         public void mutacionGEN(Random r, int t, int stall, double pmax, double pmin) {
 
             double prob = t * ((pmin - pmax) / (stall - 1)) + pmax;
@@ -742,6 +754,13 @@ public class QAP {
             this.recalcular();
         }
 
+        /**
+         * It takes applies the roulette wheel selection algorithm to select a candidate for the next generation.
+         * 
+         * @param l List of candidates
+         * @param r Random object
+         * @return The winner chromosome.
+         */
         public Cromosoma Ruletaproporcional(List<Cromosoma> l, Random r) {
             double[] probabilidades = new double[l.size()];
             double suma = 0.0;
@@ -778,6 +797,7 @@ public class QAP {
     public class ordenaporcostes implements Comparator<Cromosoma> {
 
         @Override
+        // Comparing two chromosomes through their solution's cost.
         public int compare(Cromosoma o1, Cromosoma o2) {
             if (o1.coste == 0 && o2.coste == 0) {
                 return 0;
